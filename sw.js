@@ -1,15 +1,17 @@
 // Chibi Creator — offline-capable service worker.
 // network-first for code, cache-first for fonts/icons. Fully offline-capable.
-const CACHE = 'chibi-creator-v1';
+const CACHE = 'chibi-creator-v2';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './css/styles.css',
   './js/data.js',
+  './js/anime-data.js',
   './js/store.js',
   './js/chibi.js',
   './js/controls.js',
+  './js/anime.js',
   './js/gallery.js',
   './js/app.js',
   './js/pwa.js',
@@ -29,7 +31,7 @@ self.addEventListener('activate', e => {
   );
 });
 
-const CACHE_FIRST = /\.(?:woff2|png|ico|svg)$/i;
+const CACHE_FIRST = /\.(?:woff2|png|ico|svg|jpg|jpeg)$/i;  // anime thumbnails cache on first view
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
