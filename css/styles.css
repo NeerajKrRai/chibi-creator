@@ -98,6 +98,21 @@ button{cursor:pointer;font-family:inherit;border:none;outline:none;color:inherit
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(140px);background:var(--gr);color:var(--cr);font-weight:700;font-size:15px;padding:12px 24px;border-radius:50px;z-index:200;transition:transform .45s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 26px rgba(45,106,79,.5);white-space:nowrap}
 .toast.on{transform:translateX(-50%) translateY(0)}
 
+/* ── decorate (draw on anime) screen ── */
+.drawscreen{position:fixed;inset:0;z-index:120;display:none;flex-direction:column;background:var(--ch-d)}
+.drawscreen.on{display:flex}
+.draw-stage{flex:1;display:flex;align-items:center;justify-content:center;padding:10px;min-height:0;background:radial-gradient(ellipse at 50% 40%,#242024,#141414)}
+#drawPad{max-width:100%;max-height:100%;border-radius:14px;box-shadow:var(--sdw);display:block;touch-action:none;cursor:crosshair;background:#fff}
+.draw-tools{flex-shrink:0;display:flex;flex-direction:column;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom));background:rgba(20,20,20,.96);border-top:1px solid rgba(255,255,255,.07)}
+.draw-tools .row{justify-content:center}
+.tool-row2{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.dactions{gap:8px}
+.size{min-width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;transition:all .12s;flex:0 0 auto}
+.size .dot{background:var(--cr);border-radius:50%}
+.size.on{background:rgba(82,183,136,.2);border-color:var(--gr-l)}
+.size:active{transform:scale(.9)}
+.draw-tools .act{flex:0 0 auto;width:48px}
+
 @media(min-width:620px){
   #chibi{height:min(42vh,360px)}
   .panel,.actions{max-width:640px;width:100%;margin:0 auto}

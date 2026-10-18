@@ -78,16 +78,26 @@
   </div>
 </div>
 
-<!-- anime render overlay -->
-<div class="lightbox" id="animeView" onclick="closeAnime(event)">
-  <div class="lb-inner">
-    <img id="avImg" alt="anime character">
-    <div class="av-name" id="avName"></div>
-    <div class="av-series" id="avSeries"></div>
-    <div class="lb-actions">
-      <button class="chip go2" onclick="saveAnime()">💾 Save to gallery</button>
-      <button class="chip" onclick="downloadAnime()">⬇ Download</button>
-      <button class="chip" onclick="closeAnime()">✦ Close</button>
+<!-- decorate screen: draw on the anime character -->
+<div class="drawscreen" id="sDraw">
+  <header class="bar top">
+    <button class="chip" onclick="closeDraw()">← Back</button>
+    <div class="brand" id="drawTitle">🎨 Decorate</div>
+    <button class="chip right go2" onclick="saveDraw()">✨ Save</button>
+  </header>
+  <div class="draw-stage"><canvas id="drawPad"></canvas></div>
+  <div class="draw-tools">
+    <div class="row" id="dColors"></div>
+    <div class="tool-row2">
+      <div class="row" id="dSizes"></div>
+      <div class="row" id="dStamps"></div>
+    </div>
+    <div class="row dactions">
+      <button class="act" id="dBrush" onclick="dSetTool('brush')" title="Brush">🖌️</button>
+      <button class="act" id="dErase" onclick="dSetTool('erase')" title="Eraser">🧽</button>
+      <button class="act" onclick="dUndo()" title="Undo">↩️</button>
+      <button class="act" onclick="dClear()" title="Clear doodles">🗑️</button>
+      <button class="act" onclick="downloadDraw()" title="Download">⬇</button>
     </div>
   </div>
 </div>
@@ -100,6 +110,7 @@
 <script src="js/chibi.js"></script>
 <script src="js/controls.js"></script>
 <script src="js/anime.js"></script>
+<script src="js/draw.js"></script>
 <script src="js/gallery.js"></script>
 <script src="js/app.js"></script>
 <script src="js/pwa.js"></script>
