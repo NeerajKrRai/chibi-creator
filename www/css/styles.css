@@ -101,9 +101,10 @@ button{cursor:pointer;font-family:inherit;border:none;outline:none;color:inherit
 /* ── decorate (draw on anime) screen ── */
 .drawscreen{position:fixed;inset:0;z-index:120;display:none;flex-direction:column;background:var(--ch-d)}
 .drawscreen.on{display:flex}
-.draw-stage{flex:1;display:flex;align-items:center;justify-content:center;padding:10px;min-height:0;background:radial-gradient(ellipse at 50% 40%,#242024,#141414)}
+.draw-stage{flex:1;min-height:42vh;display:flex;align-items:center;justify-content:center;padding:10px;background:radial-gradient(ellipse at 50% 40%,#242024,#141414)}
 #drawPad{max-width:100%;max-height:100%;border-radius:14px;box-shadow:var(--sdw);display:block;touch-action:none;cursor:crosshair;background:#fff}
-.draw-tools{flex-shrink:0;display:flex;flex-direction:column;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom));background:rgba(20,20,20,.96);border-top:1px solid rgba(255,255,255,.07)}
+/* cap the toolbar so it can't crush the picture on a phone — it scrolls within its own area */
+.draw-tools{flex-shrink:0;max-height:48vh;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom));background:rgba(20,20,20,.96);border-top:1px solid rgba(255,255,255,.07)}
 .draw-tools .row{justify-content:center}
 .tool-row2{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 .dactions{gap:8px}
