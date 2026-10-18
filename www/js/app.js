@@ -4,8 +4,10 @@ let curScreen = 'sCreate';
 function go(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
   document.getElementById(id).classList.add('on');
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.s === id));
   curScreen = id;
   if (id === 'sGallery') renderGallery();
+  else if (id === 'sAnime') renderAnimeGrid(document.getElementById('animeSearch').value);
 }
 
 let _toastTimer = null;

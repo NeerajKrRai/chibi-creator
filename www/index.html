@@ -12,57 +12,63 @@
 </head>
 <body>
 
-<!-- ══ CREATOR ══ -->
-<div class="screen on" id="sCreate">
-  <header class="bar top">
-    <a class="chip" href="/" title="All of Neeksha's apps">🏠 Apps</a>
-    <div class="brand">🧒 Chibi&nbsp;Creator</div>
-    <button class="chip right" onclick="go('sGallery')">📁 Gallery <span id="galCount"></span></button>
-  </header>
+<header class="appbar">
+  <a class="chip home" href="/" title="All of Neeksha's apps">🏠</a>
+  <nav class="tabs">
+    <button class="tab on" data-s="sCreate" onclick="go('sCreate')">🎨 Create</button>
+    <button class="tab" data-s="sAnime" onclick="go('sAnime')">🔍 Anime</button>
+    <button class="tab" data-s="sGallery" onclick="go('sGallery')">📁 Gallery <span class="galCount" id="galCount"></span></button>
+  </nav>
+</header>
 
-  <div class="stage">
-    <canvas id="chibi" width="600" height="720"></canvas>
-  </div>
+<main id="screens">
 
-  <div class="panel">
-    <div class="ctl"><div class="lbl">🎨 Background</div><div class="row" id="bgRow"></div></div>
-    <div class="ctl"><div class="lbl">🧑 Skin</div><div class="row" id="skinRow"></div></div>
-    <div class="ctl"><div class="lbl">💇 Hair style</div><div class="row" id="hairStyleRow"></div></div>
-    <div class="ctl"><div class="lbl">🎨 Hair colour</div><div class="row" id="hairColorRow"></div></div>
-    <div class="ctl"><div class="lbl">👀 Eyes</div><div class="row" id="eyeRow"></div></div>
-    <div class="ctl"><div class="lbl">👄 Mouth</div><div class="row" id="mouthRow"></div></div>
-    <div class="ctl"><div class="lbl">🌸 Cheeks</div><div class="row"><button class="opt" id="blushToggle">blush ✨</button></div></div>
-    <div class="ctl"><div class="lbl">👕 Outfit</div><div class="row" id="outfitRow"></div></div>
-    <div class="ctl"><div class="lbl">🎀 Accessory</div><div class="row" id="accRow"></div></div>
-  </div>
-
-  <div class="actions">
-    <button class="act" onclick="randomize()">🎲 Surprise me!</button>
-    <button class="act go" onclick="saveChibi()">✨ Save</button>
-  </div>
-</div>
-
-<!-- ══ GALLERY ══ -->
-<div class="screen" id="sGallery">
-  <header class="bar top">
-    <button class="chip" onclick="go('sCreate')">← Creator</button>
-    <div class="brand">📁 My Gallery</div>
-    <a class="chip right" href="/" title="All of Neeksha's apps">🏠 Apps</a>
-  </header>
-  <div class="gallery-wrap">
-    <div class="grid" id="galGrid"></div>
-    <div class="empty" id="galEmpty" hidden>
-      <div class="ei">🧒</div>
-      <p>No chibis yet!<br>Make a cutie and tap <b>✨ Save</b>.</p>
-      <button class="chip big" onclick="go('sCreate')">Start creating →</button>
+  <!-- ══ CREATE ══ -->
+  <div class="screen on" id="sCreate">
+    <div class="stage"><canvas id="chibi" width="600" height="720"></canvas></div>
+    <div class="panel">
+      <div class="ctl"><div class="lbl">🎨 Background</div><div class="row" id="bgRow"></div></div>
+      <div class="ctl"><div class="lbl">🧑 Skin</div><div class="row" id="skinRow"></div></div>
+      <div class="ctl"><div class="lbl">💇 Hair style</div><div class="row" id="hairStyleRow"></div></div>
+      <div class="ctl"><div class="lbl">🎨 Hair colour</div><div class="row" id="hairColorRow"></div></div>
+      <div class="ctl"><div class="lbl">👀 Eyes</div><div class="row" id="eyeRow"></div></div>
+      <div class="ctl"><div class="lbl">👄 Mouth</div><div class="row" id="mouthRow"></div></div>
+      <div class="ctl"><div class="lbl">🌸 Cheeks</div><div class="row"><button class="opt" id="blushToggle">blush ✨</button></div></div>
+      <div class="ctl"><div class="lbl">👕 Outfit</div><div class="row" id="outfitRow"></div></div>
+      <div class="ctl"><div class="lbl">🎀 Accessory</div><div class="row" id="accRow"></div></div>
+    </div>
+    <div class="actions">
+      <button class="act" onclick="randomize()">🎲 Surprise me!</button>
+      <button class="act go" onclick="saveChibi()">✨ Save</button>
     </div>
   </div>
-</div>
 
-<!-- ══ LIGHTBOX ══ -->
+  <!-- ══ ANIME SEARCH ══ -->
+  <div class="screen" id="sAnime">
+    <div class="search-bar">
+      <input id="animeSearch" type="search" placeholder="🔍 Search anime characters…" autocomplete="off" oninput="renderAnimeGrid(this.value)">
+    </div>
+    <div class="anime-grid" id="animeGrid"></div>
+  </div>
+
+  <!-- ══ GALLERY ══ -->
+  <div class="screen" id="sGallery">
+    <div class="gallery-wrap">
+      <div class="grid" id="galGrid"></div>
+      <div class="empty" id="galEmpty" hidden>
+        <div class="ei">🧒</div>
+        <p>No saved pictures yet!<br>Make a chibi or render an anime character, then tap save.</p>
+        <button class="chip big" onclick="go('sCreate')">Start creating →</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- gallery lightbox -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <div class="lb-inner">
-    <img id="lbImg" alt="chibi">
+    <img id="lbImg" alt="picture">
     <div class="lb-date" id="lbDate"></div>
     <div class="lb-actions">
       <button class="chip" onclick="downloadCurrent()">⬇ Save picture</button>
@@ -72,12 +78,28 @@
   </div>
 </div>
 
+<!-- anime render overlay -->
+<div class="lightbox" id="animeView" onclick="closeAnime(event)">
+  <div class="lb-inner">
+    <img id="avImg" alt="anime character">
+    <div class="av-name" id="avName"></div>
+    <div class="av-series" id="avSeries"></div>
+    <div class="lb-actions">
+      <button class="chip go2" onclick="saveAnime()">💾 Save to gallery</button>
+      <button class="chip" onclick="downloadAnime()">⬇ Download</button>
+      <button class="chip" onclick="closeAnime()">✦ Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="js/data.js"></script>
+<script src="js/anime-data.js"></script>
 <script src="js/store.js"></script>
 <script src="js/chibi.js"></script>
 <script src="js/controls.js"></script>
+<script src="js/anime.js"></script>
 <script src="js/gallery.js"></script>
 <script src="js/app.js"></script>
 <script src="js/pwa.js"></script>
