@@ -1,12 +1,20 @@
 // ── Draw / decorate on an anime character ──
 // The character image is the base layer; doodles live on a separate layer so the
 // eraser reveals the picture (not white). Save = the composited result.
-const PAINT_COLORS = ['#2B2B2B', '#ffffff', '#C97B84', '#E8A0A8', '#52B788', '#5E81F4', '#A29BFE', '#FFD166', '#F4845F', '#FF6B6B', '#9B59B6'];
+const PAINT_COLORS = ['#2B2B2B', '#ffffff', '#C97B84', '#E8A0A8', '#52B788', '#5E81F4', '#A29BFE', '#FFD166', '#F4845F', '#FF6B6B', '#9B59B6', '#FF8FC8', '#00C2B8'];
 const PAINT_SIZES = [{ r: 4, d: 7 }, { r: 10, d: 13 }, { r: 20, d: 22 }];
-const PAINT_STAMPS = ['🌸', '⭐', '💖', '🦋', '🌈', '✨', '👑', '🎀'];
+const PAINT_STAMPS = ['🌸', '⭐', '💖', '🦋', '🌈', '✨', '👑', '🎀', '🍓', '🌟', '💫', '🩷', '🦄', '🍰', '🌺', '🐾', '☁️', '🍭'];
+const DFONTS = [
+  { k: 'Fancy',      css: '"Playfair Display", serif' },
+  { k: 'Clean',      css: '"DM Sans", sans-serif' },
+  { k: 'Curly',      css: '"Snell Roundhand", "Brush Script MT", cursive' },
+  { k: 'Bubbly',     css: '"Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive' },
+  { k: 'Bold',       css: 'Impact, "Arial Black", fantasy' },
+  { k: 'Type',       css: '"Courier New", monospace' },
+];
 
 let dPad, dctx, dLayer, dlctx, dBase, dW = 0, dH = 0;
-let dColor = '#FF6B6B', dSize = 10, dTool = 'brush', dStamp = '🌸';
+let dColor = '#FF6B6B', dSize = 10, dTool = 'brush', dStamp = '🌸', dFont = DFONTS[0].css;
 let dDrawing = false, dLastX = 0, dLastY = 0, dHistory = [];
 const D_HIST_MAX = 20;
 
@@ -48,6 +56,8 @@ function dPush() { try { dHistory.push(dLayer.toDataURL()); } catch (e) {} if (d
 
 function dStart(p) {
   if (dTool === 'stamp') { dStampAt(p); return; }
+  if (dTool === 'text') { dTextAt(p); return; }
+  if (dTool === 'glitter') { dPush(); dDrawing = true; glitterAt(p); recompose(); return; }
   dPush(); dDrawing = true; dLastX = p.x; dLastY = p.y;
   dlctx.globalCompositeOperation = dTool === 'erase' ? 'destination-out' : 'source-over';
   dlctx.strokeStyle = dColor; dlctx.fillStyle = dColor;
@@ -56,6 +66,7 @@ function dStart(p) {
   recompose();
 }
 function dMove(p) {
+  if (dTool === 'glitter') { glitterAt(p); recompose(); return; }
   const mx = (dLastX + p.x) / 2, my = (dLastY + p.y) / 2;
   dlctx.beginPath(); dlctx.moveTo(dLastX, dLastY); dlctx.quadraticCurveTo(dLastX, dLastY, mx, my); dlctx.lineTo(p.x, p.y); dlctx.stroke();
   dLastX = p.x; dLastY = p.y; recompose();
@@ -67,6 +78,39 @@ function dStampAt(p) {
   dlctx.font = (26 + dSize * 2.4) + 'px serif'; dlctx.textAlign = 'center'; dlctx.textBaseline = 'middle';
   dlctx.fillText(dStamp, p.x, p.y); recompose();
 }
+function dTextAt(p) {
+  const txt = (document.getElementById('dText').value || '').trim();
+  if (!txt) { toast('Type a word first! ✏️'); return; }
+  dPush();
+  dlctx.globalCompositeOperation = 'source-over';
+  const px = 22 + dSize * 2.6;
+  dlctx.font = 'bold ' + px + 'px ' + dFont;
+  dlctx.textAlign = 'center'; dlctx.textBaseline = 'middle'; dlctx.lineJoin = 'round';
+  dlctx.strokeStyle = 'rgba(255,255,255,.92)'; dlctx.lineWidth = Math.max(3, px * 0.16);
+  dlctx.strokeText(txt, p.x, p.y);
+  dlctx.fillStyle = dColor; dlctx.fillText(txt, p.x, p.y);
+  recompose();
+}
+function glitterAt(p) {
+  dlctx.globalCompositeOperation = 'source-over';
+  for (let i = 0; i < 6; i++) {
+    const a = Math.random() * Math.PI * 2, r = Math.random() * (dSize * 1.6);
+    const x = p.x + Math.cos(a) * r, y = p.y + Math.sin(a) * r;
+    dlctx.fillStyle = Math.random() > 0.5 ? '#fff' : dColor;
+    dlctx.beginPath(); dlctx.arc(x, y, Math.random() * 1.8 + 0.8, 0, Math.PI * 2); dlctx.fill();
+  }
+}
+function glossify() {
+  dPush();
+  dlctx.globalCompositeOperation = 'source-over';
+  const g = dlctx.createLinearGradient(0, 0, dW, dH);
+  g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(0.34, 'rgba(255,255,255,0.30)');
+  g.addColorStop(0.5, 'rgba(255,255,255,0.05)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  dlctx.fillStyle = g; dlctx.fillRect(0, 0, dW, dH);
+  dlctx.beginPath(); dlctx.ellipse(dW * 0.3, dH * 0.13, dW * 0.46, dH * 0.11, -0.3, 0, Math.PI * 2);
+  dlctx.fillStyle = 'rgba(255,255,255,0.32)'; dlctx.fill();
+  recompose(); toast('✨ Glossy!');
+}
 function dUndo() {
   if (!dHistory.length) return;
   const u = dHistory.pop(); const im = new Image();
@@ -77,9 +121,11 @@ function dClear() { dPush(); dlctx.clearRect(0, 0, dW, dH); recompose(); }
 
 function dSetTool(t) {
   dTool = t;
-  document.getElementById('dBrush').classList.toggle('on', t === 'brush');
-  document.getElementById('dErase').classList.toggle('on', t === 'erase');
+  [['dBrush', 'brush'], ['dGlitter', 'glitter'], ['dErase', 'erase'], ['dTextBtn', 'text']].forEach(([id, k]) => {
+    const el = document.getElementById(id); if (el) el.classList.toggle('on', t === k);
+  });
   if (t !== 'stamp') document.querySelectorAll('#dStamps .opt').forEach(s => s.classList.remove('on'));
+  const tr = document.getElementById('dTextRow'); if (tr) tr.hidden = (t !== 'text');
 }
 function dSetColor(c, el) {
   dColor = c; if (dTool === 'erase') dSetTool('brush');
@@ -88,9 +134,11 @@ function dSetColor(c, el) {
 function dSetSize(r, el) { dSize = r; document.querySelectorAll('#dSizes .size').forEach(s => s.classList.remove('on')); if (el) el.classList.add('on'); }
 function dSetStamp(s, el) {
   dStamp = s; dTool = 'stamp';
-  document.getElementById('dBrush').classList.remove('on'); document.getElementById('dErase').classList.remove('on');
+  ['dBrush', 'dGlitter', 'dErase', 'dTextBtn'].forEach(id => { const e = document.getElementById(id); if (e) e.classList.remove('on'); });
+  const tr = document.getElementById('dTextRow'); if (tr) tr.hidden = true;
   document.querySelectorAll('#dStamps .opt').forEach(x => x.classList.remove('on')); if (el) el.classList.add('on');
 }
+function dSetFont(css, el) { dFont = css; document.querySelectorAll('#dFonts .fontchip').forEach(f => f.classList.remove('on')); if (el) el.classList.add('on'); }
 
 function buildDrawTools() {
   const cr = document.getElementById('dColors');
@@ -104,6 +152,8 @@ function buildDrawTools() {
   PAINT_SIZES.forEach(s => { const b = document.createElement('button'); b.className = 'size' + (s.r === dSize ? ' on' : ''); const d = document.createElement('span'); d.className = 'dot'; d.style.width = s.d + 'px'; d.style.height = s.d + 'px'; b.appendChild(d); b.onclick = () => dSetSize(s.r, b); sr.appendChild(b); });
   const st = document.getElementById('dStamps');
   PAINT_STAMPS.forEach(s => { const b = document.createElement('button'); b.className = 'opt'; b.textContent = s; b.onclick = () => dSetStamp(s, b); st.appendChild(b); });
+  const ft = document.getElementById('dFonts');
+  DFONTS.forEach(f => { const b = document.createElement('button'); b.className = 'fontchip' + (f.css === dFont ? ' on' : ''); b.textContent = f.k; b.style.fontFamily = f.css; b.onclick = () => dSetFont(f.css, b); ft.appendChild(b); });
   dSetTool('brush');
 }
 

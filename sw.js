@@ -1,6 +1,6 @@
 // Chibi Creator — offline-capable service worker.
 // network-first for code, cache-first for fonts/icons. Fully offline-capable.
-const CACHE = 'chibi-creator-v4';
+const CACHE = 'chibi-creator-v5';
 const ASSETS = [
   './',
   './index.html',

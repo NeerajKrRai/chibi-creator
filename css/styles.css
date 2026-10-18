@@ -112,6 +112,13 @@ button{cursor:pointer;font-family:inherit;border:none;outline:none;color:inherit
 .size.on{background:rgba(82,183,136,.2);border-color:var(--gr-l)}
 .size:active{transform:scale(.9)}
 .draw-tools .act{flex:0 0 auto;width:48px}
+.dtextrow{display:flex;flex-direction:column;gap:8px;align-items:center}
+#dText{width:min(320px,90%);height:40px;border-radius:12px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.14);color:var(--cr);font-size:16px;padding:0 14px;outline:none;text-align:center}
+#dText:focus{border-color:var(--gr-l)}
+#dText::placeholder{color:var(--sl)}
+.fontchip{height:34px;padding:0 12px;border-radius:10px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:var(--cr);font-size:15px;transition:all .12s;flex:0 0 auto}
+.fontchip:active{transform:scale(.93)}
+.fontchip.on{background:rgba(82,183,136,.2);border-color:var(--gr-l)}
 
 @media(min-width:620px){
   #chibi{height:min(42vh,360px)}

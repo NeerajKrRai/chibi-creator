@@ -88,12 +88,19 @@
   <div class="draw-stage"><canvas id="drawPad"></canvas></div>
   <div class="draw-tools">
     <div class="row" id="dColors"></div>
+    <div class="dtextrow" id="dTextRow" hidden>
+      <input id="dText" type="text" maxlength="24" placeholder="type a word…" autocomplete="off">
+      <div class="row" id="dFonts"></div>
+    </div>
     <div class="tool-row2">
       <div class="row" id="dSizes"></div>
       <div class="row" id="dStamps"></div>
     </div>
     <div class="row dactions">
       <button class="act" id="dBrush" onclick="dSetTool('brush')" title="Brush">🖌️</button>
+      <button class="act" id="dGlitter" onclick="dSetTool('glitter')" title="Glitter">✨</button>
+      <button class="act" id="dTextBtn" onclick="dSetTool('text')" title="Text">🅰️</button>
+      <button class="act" onclick="glossify()" title="Add gloss">💧</button>
       <button class="act" id="dErase" onclick="dSetTool('erase')" title="Eraser">🧽</button>
       <button class="act" onclick="dUndo()" title="Undo">↩️</button>
       <button class="act" onclick="dClear()" title="Clear doodles">🗑️</button>
